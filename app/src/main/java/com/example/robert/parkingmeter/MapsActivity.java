@@ -1,7 +1,10 @@
 package com.example.robert.parkingmeter;
 
 
+import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.provider.SyncStateContract;
 import android.support.annotation.RequiresPermission;
 import android.support.v7.app.AppCompatActivity;
 import android.app.ProgressDialog;
@@ -24,20 +27,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Ref;
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
+    Button btnHit;
     TextView txtJson;
+    private FragmentManager mapFragmentManager;
+    private SharedPreferences mapSharedPreferences;
+    private boolean mapUse;
+    public static TextView data;
 
 
     @Override
@@ -49,9 +48,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        btnHit = (Button) findViewById(R.id.btnHit);
         txtJson = (TextView) findViewById(R.id.tvJsonItem);
-        new JsonTask().execute("Url address here");
 
+        btnHit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchData process = new fetchData();
+                process.execute();
+            }
+        });
     }
 
 
